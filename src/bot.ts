@@ -1,9 +1,12 @@
 import * as config from './config.json';
 import tmi, {Client, Options} from 'tmi.js';
+import CommandsManager from './commands/CommandsManager';
 import LightCommand from './commands/LightCommand';
+import CommandBase from './commands/CommandBase';
 
 export default class Bot {
     private tmiClient: Client | undefined;
+    private commandsManager: CommandsManager | undefined;
 
     private tmiOptions: Options = {
         options: { debug: true },
@@ -27,9 +30,11 @@ export default class Bot {
      * Initialize bot, creating tmi client connection and events.
      */
     public init() {
+        this.commandsManager = new CommandsManager();
+
         this.tmiClient = tmi.client(this.tmiOptions);
-        this.tmiClient.on('connected', this.onConnected);
-        this.tmiClient.on('message', this.onMessage);
+        this.tmiClient.on('connected', this.onConnected.bind(this));
+        this.tmiClient.on('message', this.onMessage.bind(this));
 
         this.tmiClient.connect()
                 .catch(console.error);
@@ -40,7 +45,6 @@ export default class Bot {
     }
 
     private onMessage(channel: string, userstate: tmi.ChatUserstate, message: string, self: boolean) {
-        // TODO 
-        // Create logic to manage commands based on ICommand
+        this.commandsManager?.manageRequest(message);
     }
 }

@@ -20,9 +20,9 @@
   "author": "lucalas",
   "license": "ISC",
   "bugs": {
-    "url": ""
+    "url": "https://github.com/lucalas/NodeTwitchBot"
   },
-  "homepage": "",
+  "homepage": "https://github.com/lucalas/NodeTwitchBot",
   "dependencies": {
     "axios": "^0.21.0",
     "tmi.js": "^1.5.0",

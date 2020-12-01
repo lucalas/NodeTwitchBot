@@ -1,9 +1,15 @@
 import axios from 'axios';
-import ICommand from './ICommand';
+import CommandBase from './CommandBase';
+import CommandsManager from './CommandsManager';
 
-export default class LightCommand implements ICommand<LightCommandOpts> {
+export default class LightCommand extends CommandBase<LightCommandOpts> {
+    public static instance: LightCommand = new LightCommand();
 
     private command: string = "!light";
+
+    constructor() {
+        super();
+    }
 
     public getCommand(): string {
         return this.command;

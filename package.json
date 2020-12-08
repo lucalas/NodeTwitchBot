@@ -24,7 +24,9 @@
   },
   "homepage": "https://github.com/lucalas/NodeTwitchBot",
   "dependencies": {
+    "@types/dotenv": "^8.2.0",
     "axios": "^0.21.0",
+    "dotenv": "^8.2.0",
     "tmi.js": "^1.5.0",
     "ts-node-dev": "^1.0.0"
   },

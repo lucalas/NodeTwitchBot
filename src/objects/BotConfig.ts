@@ -1,4 +1,4 @@
-import * as config from '../config.json';
+import DotEnv from 'dotenv';
 
 export default class BotConfig {
     public channel_name: string = "";
@@ -7,6 +7,6 @@ export default class BotConfig {
     public ha_token: string = "";
 
     public static getConfig(): BotConfig {
-        return config;
+        return DotEnv.config().parsed! as unknown as BotConfig;
     }
 }

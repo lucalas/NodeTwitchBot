@@ -1,6 +1,6 @@
-import axios from 'axios';
+import axios, { AxiosResponse } from 'axios';
 import HACommandBase from './HACommandBase';
-import CommandsManager from './CommandsManager';
+import CommandResponse from '../objects/CommandResponse';
 
 export default class LightCommand extends HACommandBase<LightCommandOpts> {
     protected command: string = "!light";
@@ -12,24 +12,26 @@ export default class LightCommand extends HACommandBase<LightCommandOpts> {
         return lightArgs;
     }
 
-    protected run(args: LightCommandOpts): void {
-        axios.post(
-            'http://hassio:8123/api/services/light/turn_on',
-            {
-                'entity_id': 'light.letto',
-                'color_name': args.color
-            },
-            {
-                headers: {
-                    Authorization: `Bearer ${args.token}`,
-                    'Content-Type': 'application/json'
+    protected async run(args: LightCommandOpts): Promise<CommandResponse> {
+        try {
+            let resp: AxiosResponse = await axios.post(
+                'http://hassio:8123/api/services/light/turn_on',
+                {
+                    'entity_id': 'light.letto',
+                    'color_name': args.color
+                },
+                {
+                    headers: {
+                        Authorization: `Bearer ${args.token}`,
+                        'Content-Type': 'application/json'
+                    }
                 }
-            }
-        )
-            // FIXME gestire il ritorno e restituire un errore al mittente
-            // se qualcosa e' andato storto (es. colore sbagliato)
-            //.then(console.log)
-            .catch(console.log);
+            )
+        } catch (ex) {
+            // TODO error
+        }
+
+        return this.getSuccessResponse();
     }
 
 }

@@ -1,6 +1,7 @@
 import tmi, { Client, Options } from 'tmi.js';
 import CommandsManager from './commands/CommandsManager';
 import BotConfig from './objects/BotConfig';
+import CommandResponse from './objects/CommandResponse';
 
 export default class Bot {
   private tmiClient: Client | undefined;
@@ -43,7 +44,11 @@ export default class Bot {
     console.log(`* Connected to ${address}:${port}`);
   }
 
-  private onMessage(channel: string, userstate: tmi.ChatUserstate, message: string, self: boolean) {
-    this.commandsManager?.manageRequest(message);
+  private async onMessage(channel: string, userstate: tmi.ChatUserstate, message: string, self: boolean) {
+    let response: CommandResponse | undefined = await this.commandsManager!.manageRequest(message);
+
+    if (response != undefined && response.success() && response.response()) {
+      this.tmiClient!.say(channel, response.textResponse);
+    }
   }
 }

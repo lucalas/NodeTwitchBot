@@ -13,23 +13,23 @@ export default class LightCommand extends HACommandBase<LightCommandOpts> {
     }
 
     protected run(args: LightCommandOpts): void {
-        axios.post( 
+        axios.post(
             'http://hassio:8123/api/services/light/turn_on',
             {
-            'entity_id': 'light.letto',
-            'color_name': args.color
+                'entity_id': 'light.letto',
+                'color_name': args.color
             },
             {
-            headers: { 
-                Authorization: `Bearer ${args.token}`,
-                'Content-Type': 'application/json'
-            }
+                headers: {
+                    Authorization: `Bearer ${args.token}`,
+                    'Content-Type': 'application/json'
+                }
             }
         )
-        // FIXME gestire il ritorno e restituire un errore al mittente
-        // se qualcosa e' andato storto (es. colore sbagliato)
-        //.then(console.log)
-        .catch(console.log);
+            // FIXME gestire il ritorno e restituire un errore al mittente
+            // se qualcosa e' andato storto (es. colore sbagliato)
+            //.then(console.log)
+            .catch(console.log);
     }
 
 }

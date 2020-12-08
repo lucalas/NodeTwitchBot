@@ -1,49 +1,49 @@
-import tmi, {Client, Options} from 'tmi.js';
+import tmi, { Client, Options } from 'tmi.js';
 import CommandsManager from './commands/CommandsManager';
 import BotConfig from './objects/BotConfig';
 
 export default class Bot {
-    private tmiClient: Client | undefined;
-    private commandsManager: CommandsManager | undefined;
-    private config: BotConfig = BotConfig.getConfig();
+  private tmiClient: Client | undefined;
+  private commandsManager: CommandsManager | undefined;
+  private config: BotConfig = BotConfig.getConfig();
 
-    private tmiOptions: Options = {
-        options: { debug: true },
-        connection: {
-          reconnect: true,
-          secure: true
-        },
-        identity: {
-          username: this.config.bot_username,
-          password: this.config.oauth_token
-        },
-        channels: [
-          this.config.channel_name
-        ]
-      };
+  private tmiOptions: Options = {
+    options: { debug: true },
+    connection: {
+      reconnect: true,
+      secure: true
+    },
+    identity: {
+      username: this.config.bot_username,
+      password: this.config.oauth_token
+    },
+    channels: [
+      this.config.channel_name
+    ]
+  };
 
-    constructor() {
-    }
+  constructor() {
+  }
 
-    /**
-     * Initialize bot, creating tmi client connection and events.
-     */
-    public init() {
-        this.commandsManager = new CommandsManager(this.config);
+  /**
+   * Initialize bot, creating tmi client connection and events.
+   */
+  public init() {
+    this.commandsManager = new CommandsManager(this.config);
 
-        this.tmiClient = tmi.client(this.tmiOptions);
-        this.tmiClient.on('connected', this.onConnected.bind(this));
-        this.tmiClient.on('message', this.onMessage.bind(this));
+    this.tmiClient = tmi.client(this.tmiOptions);
+    this.tmiClient.on('connected', this.onConnected.bind(this));
+    this.tmiClient.on('message', this.onMessage.bind(this));
 
-        this.tmiClient.connect()
-                .catch(console.error);
-    }
+    this.tmiClient.connect()
+      .catch(console.error);
+  }
 
-    private onConnected(address: string, port: number) {
-        console.log(`* Connected to ${address}:${port}`);
-    }
+  private onConnected(address: string, port: number) {
+    console.log(`* Connected to ${address}:${port}`);
+  }
 
-    private onMessage(channel: string, userstate: tmi.ChatUserstate, message: string, self: boolean) {
-        this.commandsManager?.manageRequest(message);
-    }
+  private onMessage(channel: string, userstate: tmi.ChatUserstate, message: string, self: boolean) {
+    this.commandsManager?.manageRequest(message);
+  }
 }

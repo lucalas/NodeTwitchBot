@@ -1,12 +1,11 @@
-import * as config from './config.json';
 import tmi, {Client, Options} from 'tmi.js';
 import CommandsManager from './commands/CommandsManager';
-import LightCommand from './commands/LightCommand';
-import CommandBase from './commands/CommandBase';
+import BotConfig from './objects/BotConfig';
 
 export default class Bot {
     private tmiClient: Client | undefined;
     private commandsManager: CommandsManager | undefined;
+    private config: BotConfig = BotConfig.getConfig();
 
     private tmiOptions: Options = {
         options: { debug: true },
@@ -15,11 +14,11 @@ export default class Bot {
           secure: true
         },
         identity: {
-          username: config.bot_username,
-          password: config.oauth_token
+          username: this.config.bot_username,
+          password: this.config.oauth_token
         },
         channels: [
-          config.channel_name
+          this.config.channel_name
         ]
       };
 
@@ -30,7 +29,7 @@ export default class Bot {
      * Initialize bot, creating tmi client connection and events.
      */
     public init() {
-        this.commandsManager = new CommandsManager();
+        this.commandsManager = new CommandsManager(this.config);
 
         this.tmiClient = tmi.client(this.tmiOptions);
         this.tmiClient.on('connected', this.onConnected.bind(this));

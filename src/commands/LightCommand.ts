@@ -1,21 +1,18 @@
 import axios from 'axios';
-import CommandBase from './CommandBase';
+import HACommandBase from './HACommandBase';
 import CommandsManager from './CommandsManager';
 
-export default class LightCommand extends CommandBase<LightCommandOpts> {
-    public static instance: LightCommand = new LightCommand();
+export default class LightCommand extends HACommandBase<LightCommandOpts> {
+    protected command: string = "!light";
 
-    private command: string = "!light";
-
-    constructor() {
-        super();
+    protected getArgs(args?: Array<string>): LightCommandOpts {
+        let lightArgs = new LightCommandOpts();
+        lightArgs.color = args![0];
+        lightArgs.token = args![1];
+        return lightArgs;
     }
 
-    public getCommand(): string {
-        return this.command;
-    }
-
-    execute(args: LightCommandOpts): void {
+    protected run(args: LightCommandOpts): void {
         axios.post( 
             'http://hassio:8123/api/services/light/turn_on',
             {

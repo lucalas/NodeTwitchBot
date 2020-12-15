@@ -2,8 +2,8 @@ import axios, { AxiosResponse } from 'axios';
 import HACommandBase from './HACommandBase';
 import CommandResponse from '../objects/CommandResponse';
 
-export default class LightCommand extends HACommandBase<LightCommandOpts> {
-    protected command: string = "!light";
+export default class BedLightCommand extends HACommandBase<LightCommandOpts> {
+    protected command: string = "!bedlight";
 
     protected getArgs(args?: Array<string>): LightCommandOpts {
         let lightArgs = new LightCommandOpts();

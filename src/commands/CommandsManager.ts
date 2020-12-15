@@ -1,9 +1,10 @@
 import CommandBase from './CommandBase';
-import LightCommand from './LightCommand';
+import BedLightCommand from './BedLightCommand';
 import HACommandBase from './HACommandBase';
 import BotConfig from '../objects/BotConfig';
 import CommandResponse from '../objects/CommandResponse';
 import SayHiBotCommand from './SayHiBotCommand';
+import TopLightCommand from './TopLightCommand';
 
 export default class CommandsManager {
 
@@ -11,8 +12,9 @@ export default class CommandsManager {
 
     constructor(config: BotConfig) {
         this.conf = config;
-        new LightCommand();
+        new BedLightCommand();
         new SayHiBotCommand();
+        new TopLightCommand();
     }
 
     public async manageRequest(message: string): Promise<CommandResponse | undefined> {

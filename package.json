@@ -25,12 +25,17 @@
   "homepage": "https://github.com/lucalas/NodeTwitchBot",
   "dependencies": {
     "@types/dotenv": "^8.2.0",
+    "@types/websocket": "^1.0.1",
     "axios": "^0.21.0",
     "dotenv": "^8.2.0",
+    "http": "^0.0.1-security",
+    "net": "^1.0.2",
     "tmi.js": "^1.5.0",
-    "ts-node-dev": "^1.0.0"
+    "ts-node-dev": "^1.0.0",
+    "websocket": "^1.0.33"
   },
   "devDependencies": {
+    "@types/node": "^14.14.20",
     "@types/tmi.js": "^1.4.2",
     "tslint": "^6.1.3",
     "typescript": "^4.1.2"

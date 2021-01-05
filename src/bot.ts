@@ -2,11 +2,13 @@ import tmi, { Client, Options } from 'tmi.js';
 import CommandsManager from './commands/CommandsManager';
 import BotConfig from './objects/BotConfig';
 import CommandResponse from './objects/CommandResponse';
+import WebSocketServer from './services/CustomWebSocketServer';
 
 export default class Bot {
   private tmiClient: Client | undefined;
   private commandsManager: CommandsManager | undefined;
   private config: BotConfig = BotConfig.getConfig();
+  private webSocket: WebSocketServer = new WebSocketServer();
 
   private tmiOptions: Options = {
     options: { debug: true },
@@ -38,6 +40,8 @@ export default class Bot {
 
     this.tmiClient.connect()
       .catch(console.error);
+
+    this.webSocket.start();
   }
 
   private onConnected(address: string, port: number) {

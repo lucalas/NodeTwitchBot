@@ -3,7 +3,7 @@ export default class CommandResponse {
     public error: string = "";
 
     public success(): boolean {
-        return this.error != undefined && this.error != null && this.error != "";
+        return this.error == undefined || this.error == null || this.error == "";
     }
 
     public response(): boolean {

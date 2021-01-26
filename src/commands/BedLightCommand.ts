@@ -31,7 +31,13 @@ export default class BedLightCommand extends HACommandBase<LightCommandOpts> {
             // TODO error
         }
 
-        return this.getSuccessResponse();
+        let rsp: CommandResponse = this.getSuccessResponse();
+
+        if (args.color === "black") {
+            rsp.textResponse = "Accendermi di nero ti fara' cadere nell'oblio" ;
+        }
+        
+        return rsp;
     }
 
 }

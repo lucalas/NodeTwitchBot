@@ -1,0 +1,15 @@
+<html>
+    <head></head>
+    <body>
+        <span id="value"></span>
+        <script>
+            var socket = new WebSocket("ws://localhost:8181");
+            socket.onopen = () => {
+                socket.send('{"type": "heartbeat"}');
+            };
+            socket.onmessage = message => {
+                document.getElementById("value").textContent = message.data;
+            }
+        </script>
+    </body>
+</html>

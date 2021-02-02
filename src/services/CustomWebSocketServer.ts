@@ -15,7 +15,15 @@ export default class CustomWebSocketServer {
         this.server.on('request', request => {
             let connection = request.accept(undefined, request.origin);
             connection.on("message", data => {
-                console.log("Received Message:", data.type);
+                // TODO change this method used for testing heartbeat
+                if (JSON.parse(data.utf8Data!).type === "heartbeat") {
+                    let a = 0;
+                    setInterval(() => {
+                        connection.send(a);
+                        a++;
+                      }, 1000);
+                }
+                console.log("Received Message:", data.utf8Data);
                 //connection.sendUTF('Hi this is WebSocket server!');
             });
         });

@@ -1,7 +1,7 @@
-import WebSourceBase from "../WebSourceBase";
+import OverlayBase from "../OverlayBase";
 import fs from 'fs';
 
-export default class HeartbeatWebSource extends WebSourceBase {
+export default class HeartbeatWebSource extends OverlayBase {
     private heartbeat: number = 5;
 
     public getWebPage(): string {

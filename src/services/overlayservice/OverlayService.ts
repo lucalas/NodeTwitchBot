@@ -1,9 +1,9 @@
 import http, { Server, IncomingMessage, ServerResponse } from "http";
-import HeartbeatWebSource from "./heartbeat/HeartbeatWebSource";
-import TestWebSource from "./TestWebSource";
-import WebSourceBase from "./WebSourceBase";
+import HeartbeatWebSource from "./heartbeat/HeartbeatOverlay";
+import TestWebSource from "./TestOverlay";
+import OverlayBase from "./OverlayBase";
 
-export default class HttpWebSources {
+export default class OverlayService {
     private port: number;
     private server: Server | undefined;
 
@@ -19,7 +19,7 @@ export default class HttpWebSources {
     }
 
     private requestListener(req: IncomingMessage, res: ServerResponse): void {
-        let webSource: WebSourceBase = WebSourceBase.webSources.get(req.url!)!;
+        let webSource: OverlayBase = OverlayBase.webSources.get(req.url!)!;
         if (webSource !== undefined && webSource !== null && webSource.getUrl() === req.url) {
             res.writeHead(200, {
                 'Content-Type': 'text/html'

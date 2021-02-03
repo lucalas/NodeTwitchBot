@@ -1,7 +1,7 @@
 import tmi, { Client, Options } from 'tmi.js';
-import CommandsManager from '../commands/CommandsManager';
-import BotConfig from '../objects/BotConfig';
-import CommandResponse from '../objects/CommandResponse';
+import CommandsManager from './CommandsManager';
+import BotConfig from '../../objects/BotConfig';
+import CommandResponse from './CommandResponse';
 
 export default class TmiService {
     private config: BotConfig;

@@ -1,5 +1,5 @@
 import CommandBase from "./CommandBase";
-import CommandResponse from "../objects/CommandResponse";
+import CommandResponse from "../CommandResponse";
 
 export default class SayHiBotCommand extends CommandBase<SayHiBot> {
     protected command: string = "!sayhi";

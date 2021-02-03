@@ -19,7 +19,7 @@ export default class CustomWebSocketServer {
                 if (JSON.parse(data.utf8Data!).type === "heartbeat") {
                     let a = 0;
                     setInterval(() => {
-                        connection.send(a);
+                        connection.send(a)  ;
                         a++;
                       }, 1000);
                 }

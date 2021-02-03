@@ -1,5 +1,5 @@
 import http, { Server, IncomingMessage, ServerResponse } from "http";
-import HeartbeatWebSource from "./Heartbeat/HeartbeatWebSource";
+import HeartbeatWebSource from "./heartbeat/HeartbeatWebSource";
 import TestWebSource from "./TestWebSource";
 import WebSourceBase from "./WebSourceBase";
 

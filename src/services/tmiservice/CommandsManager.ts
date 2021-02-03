@@ -1,10 +1,10 @@
-import CommandBase from './CommandBase';
-import BedLightCommand from './BedLightCommand';
-import HACommandBase from './HACommandBase';
-import BotConfig from '../objects/BotConfig';
-import CommandResponse from '../objects/CommandResponse';
-import SayHiBotCommand from './SayHiBotCommand';
-import TopLightCommand from './TopLightCommand';
+import CommandBase from './commands/CommandBase';
+import BedLightCommand from './commands/BedLightCommand';
+import HACommandBase from './commands/HACommandBase';
+import BotConfig from '../../objects/BotConfig';
+import CommandResponse from './CommandResponse';
+import SayHiBotCommand from './commands/SayHiBotCommand';
+import TopLightCommand from './commands/TopLightCommand';
 
 export default class CommandsManager {
 

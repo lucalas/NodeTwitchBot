@@ -1,9 +1,9 @@
 import axios, { AxiosResponse } from 'axios';
 import HACommandBase from './HACommandBase';
-import CommandResponse from '../objects/CommandResponse';
+import CommandResponse from '../CommandResponse';
 
-export default class TopLightCommand extends HACommandBase<LightCommandOpts> {
-    protected command: string = "!toplight";
+export default class BedLightCommand extends HACommandBase<LightCommandOpts> {
+    protected command: string = "!bedlight";
 
     protected getArgs(args?: Array<string>): LightCommandOpts {
         let lightArgs = new LightCommandOpts();
@@ -17,7 +17,7 @@ export default class TopLightCommand extends HACommandBase<LightCommandOpts> {
             let resp: AxiosResponse = await axios.post(
                 'http://hassio:8123/api/services/light/turn_on',
                 {
-                    'entity_id': 'light.soffitto',
+                    'entity_id': 'light.letto',
                     'color_name': args.color
                 },
                 {

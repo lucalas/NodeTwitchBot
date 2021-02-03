@@ -1,4 +1,4 @@
-import CommandResponse from "../objects/CommandResponse";
+import CommandResponse from "../CommandResponse";
 
 export default abstract class CommandBase<T> {
     public static commands: Array<CommandBase<Object>> = new Array();

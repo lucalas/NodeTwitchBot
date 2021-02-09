@@ -1,7 +1,7 @@
 import http from "http";
 import {server} from "websocket";
 
-export default class CustomWebSocketServer {
+export default class WebSocketService {
     private port: number;
     private server: server | undefined;
 
@@ -15,6 +15,7 @@ export default class CustomWebSocketServer {
         this.server.on('request', request => {
             let connection = request.accept(undefined, request.origin);
             connection.on("message", data => {
+
                 // TODO change this method used for testing heartbeat
                 if (JSON.parse(data.utf8Data!).type === "heartbeat") {
                     let a = 0;

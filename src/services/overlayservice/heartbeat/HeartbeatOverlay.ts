@@ -1,7 +1,7 @@
 import OverlayBase from "../OverlayBase";
 import fs from 'fs';
 
-export default class HeartbeatWebSource extends OverlayBase {
+export default class HeartbeatOverlay extends OverlayBase {
     private heartbeat: number = 5;
 
     public getWebPage(): string {

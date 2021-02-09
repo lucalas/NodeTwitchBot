@@ -12,25 +12,25 @@ export default abstract class P2PCommunicationBase<T> {
     protected abstract senderType: string;
     protected abstract receiverType: string;
 
-    private receiver: connection | undefined;
-    private sender: connection | undefined;
+    private receiver: Array<connection> = new Array();
+    private sender: Array<connection> = new Array();
 
-    public setReceiver(receiver: connection): void {
-        this.receiver = receiver;
+    public addReceiver(receiver: connection): void {
+        this.receiver.push(receiver);
     }
 
-    public setSender(sender: connection): void {
-        this.sender = sender;
+    public addSender(sender: connection): void {
+        this.sender.push(sender);
         // TODO check if utf8Data is not null
-        this.sender.on("message", data => this.consumeData(JSON.parse(data.utf8Data!) as T))
+        sender.on("message", data => this.consumeData(JSON.parse(data.utf8Data!) as T))
     }
 
-    public getSender(): connection {
-        return this.sender!;
+    public getSender(): Array<connection> {
+        return this.sender;
     }
 
-    public getReceiver(): connection {
-        return this.receiver!;
+    public getReceiver(): Array<connection> {
+        return this.receiver;
     }
 
     public getSenderType(): string {
@@ -42,6 +42,6 @@ export default abstract class P2PCommunicationBase<T> {
     }
 
     private consumeData(data: T): void {
-        this.receiver?.send(JSON.stringify(data));
+        this.receiver.forEach(rcv => rcv.send(JSON.stringify(data)));
     }
 }

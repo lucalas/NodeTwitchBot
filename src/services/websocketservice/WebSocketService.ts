@@ -21,22 +21,17 @@ export default class WebSocketService {
                 const object: any = JSON.parse(data.utf8Data!);
                 const handlerSender: P2PCommunicationBase<any> = this.getP2PHandlerSender(object.type);
                 if (handlerSender) {
-                    if (!handlerSender.getSender()) {
-                        handlerSender.setSender(connection);
-                    }
+                    handlerSender.addSender(connection);
+                    console.log("Add sender handler");
                     return;
                 }
 
                 const handlerReceiver: P2PCommunicationBase<any> = this.getP2PHandlerReceiver(object.type);                
                 if (handlerReceiver) {
-                    if (!handlerReceiver.getReceiver()) {
-                        handlerReceiver.setReceiver(connection);
-                    }
+                    handlerReceiver.addReceiver(connection);
+                    console.log("Add receiver handler");
                     return;
                 }
-
-                console.log("Received unknown message:", data.utf8Data);
-                //connection.sendUTF('Hi this is WebSocket server!');
             });
         });
     }

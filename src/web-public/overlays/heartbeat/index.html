@@ -5,7 +5,7 @@
         <script>
             var socket = new WebSocket("ws://localhost:8181");
             socket.onopen = () => {
-                socket.send('{"type": "heartbeat"}');
+                socket.send('{"type": "get_heartbeat"}');
             };
             socket.onmessage = message => {
                 document.getElementById("value").textContent = message.data;

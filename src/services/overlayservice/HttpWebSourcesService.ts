@@ -1,5 +1,5 @@
 import http, { Server, IncomingMessage, ServerResponse } from "http";
-import HeartbeatWebSource from "./heartbeat/HeartbeatOverlay";
+import HeartbeatOverlay from "./heartbeat/HeartbeatOverlay";
 import TestOverlay from "./TestOverlay";
 import OverlayBase from "./OverlayBase";
 
@@ -9,7 +9,7 @@ export default class HttpWebSources {
 
     constructor(port: number = 8182) {
         this.port = port;
-        new HeartbeatWebSource();
+        new HeartbeatOverlay();
         new TestOverlay();
     }
 

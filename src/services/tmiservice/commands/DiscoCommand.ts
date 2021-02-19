@@ -7,7 +7,9 @@ export default class DiscoCommand extends HACommandBase<LightCommandOpts> {
     private maxChanges: number = 30;
     private current: number = 0;
     protected command: string = "!disco";
-    private colorList: Array<string> = ['aliceblue', 'antiquewhite', 'aqua', 'aquamarine', 'azure', 'beige', 'bisque', 'black', 'blanchedalmond', 'blue', 'blueviolet', 'brown', 'burlywood', 'cadetblue', 'chartreuse', 'chocolate', 'coral', 'cornflowerblue', 'cornsilk', 'crimson', 'cyan', 'darkblue', 'darkcyan', 'darkgoldenrod', 'darkgray', 'darkgreen', 'darkgrey', 'darkkhaki', 'darkmagenta', 'darkolivegreen', 'darkorange', 'darkorchid', 'darkred', 'darksalmon', 'darkseagreen', 'darkslateblue', 'darkslategray', 'darkslategrey', 'darkturquoise', 'darkviolet', 'deeppink', 'deepskyblue', 'dimgray', 'dimgrey', 'dodgerblue', 'firebrick', 'floralwhite', 'forestgreen', 'fuchsia', 'gainsboro', 'ghostwhite', 'gold', 'goldenrod', 'gray', 'green', 'greenyellow', 'grey', 'honeydew', 'hotpink', 'indianred', 'indigo', 'ivory', 'khaki', 'lavender', 'lavenderblush', 'lawngreen', 'lemonchiffon', 'lightblue', 'lightcoral', 'lightcyan', 'lightgoldenrodyellow', 'lightgray', 'lightgreen', 'lightgrey', 'lightpink', 'lightsalmon', 'lightseagreen', 'lightskyblue', 'lightslategray', 'lightslategrey', 'lightsteelblue', 'lightyellow', 'lime', 'limegreen', 'linen', 'magenta', 'maroon', 'mediumaquamarine', 'mediumblue', 'mediumorchid', 'mediumpurple', 'mediumseagreen', 'mediumslateblue', 'mediumspringgreen', 'mediumturquoise', 'mediumvioletred', 'midnightblue', 'mintcream', 'mistyrose', 'moccasin', 'navajowhite', 'navy', 'oldlace', 'olive', 'olivedrab', 'orange', 'orangered', 'orchid', 'palegoldenrod', 'palegreen', 'paleturquoise', 'palevioletred', 'papayawhip', 'peachpuff', 'peru', 'pink', 'plum', 'powderblue', 'purple', 'red', 'rosybrown', 'royalblue', 'saddlebrown', 'salmon', 'sandybrown', 'seagreen', 'seashell', 'sienna', 'silver', 'skyblue', 'slateblue', 'slategray', 'slategrey', 'snow', 'springgreen', 'steelblue', 'tan', 'teal', 'thistle', 'tomato', 'turquoise', 'violet', 'wheat', 'white', 'whitesmoke', 'yellow', 'yellowgree'];
+    private colorList: Array<string> = ['white', 'blue', 'red', 'green', 'yellow', 'purple', 'orange'];
+    private on: boolean = true;
+    private changeDelay: number = 100;
 
     protected getArgs(args?: Array<string>): LightCommandOpts {
         let lightArgs = new LightCommandOpts();
@@ -17,8 +19,10 @@ export default class DiscoCommand extends HACommandBase<LightCommandOpts> {
 
     protected async run(args: LightCommandOpts): Promise<CommandResponse> {
         try {
+            console.log("running disco");
             if (this.current == 0) {
-                setTimeout(() => {this.changeLight(this.colorList[Math.floor(Math.random() * (this.colorList.length - 0)) + 0], args.token)}, 500);
+                this.current++;
+                setTimeout(() => {this.changeLight(this.colorList[Math.floor(Math.random() * (this.colorList.length - 0)) + 0], args.token)}, this.changeDelay);
             }
         } catch (ex) {
             // TODO error
@@ -30,22 +34,38 @@ export default class DiscoCommand extends HACommandBase<LightCommandOpts> {
     }
 
     private changeLight(color: string, token: string): void {
-        axios.post(
-            'http://hassio:8123/api/services/light/turn_on',
-            {
-                'entity_id': 'light.soffitto',
-                'color_name': color
-            },
-            {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                    'Content-Type': 'application/json'
-                }
-            }
-        ).then(res => {
+        let res: Promise<AxiosResponse> | undefined;
+        if (this.on) {
+            res = axios.post(
+                'http://hassio:8123/api/services/light/turn_off',
+                {
+                    'entity_id': 'light.soffitto'
+                },
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+        } else {
+            res = axios.post(
+                'http://hassio:8123/api/services/light/turn_on',
+                {
+                    'entity_id': 'light.soffitto',
+                    'color_name': color
+                },
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+        }
+        this.on = !this.on;
+        res?.then(res => {
             this.current++;
-            if (this.current < this.maxChanges) {
-                setTimeout(() => {this.changeLight(this.colorList[Math.floor(Math.random() * (this.colorList.length - 0)) + 0], token)}, 200);
+            if (this.current < this.maxChanges || !this.on) {
+                setTimeout(() => {this.changeLight(this.colorList[Math.floor(Math.random() * (this.colorList.length - 0)) + 0], token)}, this.changeDelay);
             } else {
                 this.current = 0;
             }

@@ -5,6 +5,7 @@ import BotConfig from '../../objects/BotConfig';
 import CommandResponse from './CommandResponse';
 import SayHiBotCommand from './commands/SayHiBotCommand';
 import TopLightCommand from './commands/TopLightCommand';
+import DiscoCommand from './commands/DiscoCommand';
 
 export default class CommandsManager {
 
@@ -15,6 +16,7 @@ export default class CommandsManager {
         new BedLightCommand();
         new SayHiBotCommand();
         new TopLightCommand();
+        new DiscoCommand();
     }
 
     public async manageRequest(message: string): Promise<CommandResponse | undefined> {

@@ -19,7 +19,7 @@ export default abstract class CommandBase<T> {
     }
 
     public checkCommand(command: string): boolean {
-        return command.includes(this.command);
+        return command.indexOf(this.command) > -1;
     }
 
     public getArguments(command: string): Array<string> {

@@ -1,15 +1,160 @@
 <html>
-    <head></head>
-    <body>
-        <span id="value"></span>
-        <script>
-            var socket = new WebSocket("ws://localhost:8181");
-            socket.onopen = () => {
-                socket.send('{"type": "get_heartbeat"}');
-            };
-            socket.onmessage = message => {
-                document.getElementById("value").textContent = message.data;
+  <head>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js"></script>
+    <style>
+      @keyframes heartbeat {
+        0% {
+          transform: scale(0.75);
+        }
+        20% {
+          transform: scale(1);
+        }
+        40% {
+          transform: scale(0.75);
+        }
+        60% {
+          transform: scale(1);
+        }
+        80% {
+          transform: scale(0.75);
+        }
+        100% {
+          transform: scale(0.75);
+        }
+      }
+
+      #heart {
+        position: relative;
+        width: 100px;
+        height: 90px;
+        animation: heartbeat 1s infinite;
+      }
+
+      #heart:before,
+      #heart:after {
+        position: absolute;
+        content: "";
+        left: 50px;
+        top: 0;
+        width: 50px;
+        height: 80px;
+        background: red;
+        -moz-border-radius: 50px 50px 0 0;
+        border-radius: 50px 50px 0 0;
+        -webkit-transform: rotate(-45deg);
+        -moz-transform: rotate(-45deg);
+        -ms-transform: rotate(-45deg);
+        -o-transform: rotate(-45deg);
+        transform: rotate(-45deg);
+        -webkit-transform-origin: 0 100%;
+        -moz-transform-origin: 0 100%;
+        -ms-transform-origin: 0 100%;
+        -o-transform-origin: 0 100%;
+        transform-origin: 0 100%;
+      }
+
+      #heart:after {
+        left: 0;
+        -webkit-transform: rotate(45deg);
+        -moz-transform: rotate(45deg);
+        -ms-transform: rotate(45deg);
+        -o-transform: rotate(45deg);
+        transform: rotate(45deg);
+        -webkit-transform-origin: 100% 100%;
+        -moz-transform-origin: 100% 100%;
+        -ms-transform-origin: 100% 100%;
+        -o-transform-origin: 100% 100%;
+        transform-origin: 100% 100%;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="heart">
+      <span
+        id="value"
+        style="
+          z-index: 10;
+          position: absolute;
+          left: 28;
+          size: 15;
+          font-size: 30;
+          top: 17;
+        "
+      ></span>
+    </div>
+
+    <div style="width: 400px !important; height: 400px !important">
+      <canvas id="cardiogram"></canvas>
+    </div>
+    <script>
+      function webSocketConnection(cardiogram) {
+        var socket = new WebSocket("ws://localhost:8181");
+        socket.onopen = () => {
+          socket.send('{"type": "get_heartbeat"}');
+        };
+        socket.onmessage = (message) => {
+          var data = JSON.parse(message.data);
+          updateData(cardiogram, data.value, 15);
+          document.getElementById("value").textContent = data.BPM;
+        };
+      }
+
+      function initChart() {
+        var ctx = document.getElementById("cardiogram").getContext("2d");
+        var cardiogram = new Chart(ctx, {
+          type: "line",
+          data: {
+            labels: [],
+            datasets: [
+              {
+                borderColor: "rgba(255,99,132,1)",
+                data: [],
+                fill: false
+              },
+            ]
+            },
+            options: {
+              legend: {
+                display: false,
+              },
+              scales: {
+                xAxes: [
+                  {
+                    display: false,
+                  },
+                ],
+                yAxes: [
+                  {
+                    display: false,
+                  },
+                ],
+              },
             }
-        </script>
-    </body>
+        });
+
+        return cardiogram;
+      }
+
+      function updateData(chart, data, maxSize) {
+        if (chart.data.datasets[0].data.length >= maxSize) {
+          chart.data.labels.shift();
+          chart.data.datasets[0].data.shift();
+        }
+        chart.data.labels.push("");
+        chart.data.datasets[0].data.push(data);
+        chart.update();
+      }
+
+      function removeData(chart) {
+        chart.data.labels.pop();
+        chart.data.datasets.forEach((dataset) => {
+          dataset.data.pop();
+        });
+        chart.update();
+      }
+
+      var cardiogram = initChart();
+      webSocketConnection(cardiogram);
+    </script>
+  </body>
 </html>
